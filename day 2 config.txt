@@ -91,3 +91,22 @@ int vlan 13
 Int fa 0/11
  switchport access vlan 13
 end
+
+
+conf t
+vlan 13
+name AVIATION.army.mil.ph
+int vlan 13
+ no shut
+ ip add 10.0.32.1 255.255.224.0
+ ip dhcp excluded-add 10.0.32.1  10.0.32.99
+ ip dhcp pool AVIATION.army.mil.ph
+ network 10.0.32.0 255.255.224.0
+ default-router 10.0.32.1
+ domain-name AVIATION.army.mil.ph
+ dns-server 8.8.8.8
+ option 150 ip 10.12.100.8
+Int fa 0/12
+ switchport access vlan 13
+end
+
