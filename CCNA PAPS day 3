@@ -1,0 +1,137 @@
+task 2
+config t
+ip routing
+ipv6 unicast-routing
+int vlan 1
+no shut
+ip add 10.52.1.4 255.255.255.0
+ipv6 enable
+no ipv6 address cafe:cafe:cafe:cafe::eeee/64
+
+
+(task 2 how to get real world ipv6 experience)
+
+ipv6 DHCP server for data center:
+
+config t
+int vlan 108
+ipv6 enable
+ipv6 add fabe:bebe:fabe:bebe::1/67
+ipv6 dhcp server 80OFFICE
+ipv6 nd managed-config-flag
+ipv6 nd other-config-flag
+no shut
+ipv6 dhcp pool 80OFFICE
+address prefix fabe:bebe:fabe:bebe::1/67
+int fa0/7
+switchport access vlan 108
+int fa0/5
+switchport access vlan 108
+end
+
+
+clear ipv6 dhcp bind *
+
+
+
+
+
+
+
+
+
+config t
+vlan 108
+ name 80OFFICE
+Int vlan 108
+ no shut
+ ip add 10.32.0.1 255.254.0.0
+ip dhcp excluded-add 10.32.0.1 10.32.0.99
+ip dhcp pool 80OFFICE
+ network 10.32.0.0 255.254.0.0
+ default-router 10.32.0.1
+ domain-name NETB.army.mil.ph
+ dns-server 8.8.8.8
+end
+ 
+  
+config t
+vlan 5
+ name 512OFFICE
+Int vlan 5
+ no shut
+ ip add 172.16.0.129 255.255.255.128
+ip dhcp excluded-add 172.16.0.1 172.16.0.139
+ip dhcp pool 512OFFICE
+ network 172.16.0.129 255.255.255.128
+ default-router 172.16.0.129
+ domain-name NETB.army.mil.ph
+ dns-server 8.8.8.8
+int fa0/7
+shut
+no shut
+switchport access vlan 5
+int fa0/5
+shut
+no shut
+switchport access vlan 5
+end
+
+config t
+int vlan 5
+ipv6 enable
+ipv6 add baba:baba:baba:0380::1/57
+ipv6 dhcp server 512OFFICE
+ipv6 nd managed-config-flag
+ipv6 nd other-config-flag
+no shut
+ipv6 dhcp pool 512OFFICE
+address prefix baba:baba:baba:0380::/57
+int fa0/7
+shut
+no shut
+switchport access vlan 5
+int fa0/5
+shut
+no shut
+switchport access vlan 5
+end
+
+
+*task 4 linux for network admin*
+
+rm -r /etc/udev/rules.d/70-persistent.net
+
+route add 88.0.0.0 mask 255.0.0.0 10.52.1.4 -p
+
+learn to route in cisco
+r4
+config t
+ip route 10.1.1.4 255.255.255.252 10.1.1.9
+ip route 10.1.1.0 255.255.255.252 10.1.1.9
+
+r2:
+
+ip route 10.1.1.8 255.255.255.252 10.1.1.6
+ip route 10.1.1.0 255.255.255.252 10.1.1.6
+
+r3 pakilala si 10.1.1.0 /30
+
+ip route 10.1.1.0 255.255.255.252 10.1.1.5
+
+r1
+
+c
+ip route 10.1.1.4 255.255.255.252 10.1.1.2
+ip route 10.1.1.8 255.255.255.252 10.1.1.2
+
+
+load balance
+
+r1 have 3 telcos
+
+r1
+config t
+ip route 0.0.0.0 0.0.0.0 209.9.9.3 1
+ip route 0.0.0.0 0.0.0.0 207.7.7.2 2
+ip route 0.0.0.0 0.0.0.0 208.8.8.4 3
